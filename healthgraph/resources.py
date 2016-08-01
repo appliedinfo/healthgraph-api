@@ -311,6 +311,7 @@ class User(Resource):
     _prop_defs = {'userID': None,
                   'profile': PropResourceLink('Profile'),
                   'settings': PropResourceLink('Settings'),
+                  'fitness': PropResourceLink('FitnessActivity'),
                   'fitness_activities': PropResourceLink('FitnessActivityIter'),
                   'strength_training_activities': PropResourceLink('StrengthActivityIter'),
                   'background_activities': PropResourceLink('BackgroundActivityIter'),
@@ -336,6 +337,16 @@ class User(Resource):
     def get_records(self):
         return self._get_linked_resource(self._prop_dict['records'])
     
+    def get_fitness_activity(self,
+                                  date_min=None, date_max=None, 
+                                  mod_date_min=None, mod_date_max=None,
+                                  descending=True):
+        return self._get_linked_resource(self._prop_dict['fitness'],
+                                         date_min=date_min, 
+                                         date_max=date_max,
+                                         mod_date_min=mod_date_min,
+                                         mod_date_max=mod_date_max,
+                                         descending=descending)
     def get_fitness_activity_iter(self, 
                                   date_min=None, date_max=None, 
                                   mod_date_min=None, mod_date_max=None,
@@ -536,6 +547,7 @@ class FitnessActivity(Resource):
                   'nearest_teammate_general_measurements': None,
                   'nearest_diabetes': None,
                   'nearest_teammate_diabetes': None,
+                  'utc_offset':None
                   }
     
     _prop_main = ('type', 'start_time',)
