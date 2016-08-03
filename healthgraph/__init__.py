@@ -18,7 +18,10 @@ from resources import (PersonalRecordType, ResourceLink,
                        FitnessActivity, FitnessActivitySummary, 
                        FitnessActivityFeedItem, FitnessActivityIter,
                        StrengthActivityFeedItem, StrengthActivityIter,
-                       WeightMeasurementFeedItem, WeightMeasurementIter,)
+                       WeightMeasurementFeedItem, WeightMeasurementIter,
+                       BackgroundActivityFeedItem, BackgroundActivityIter,
+                       NutritionMeasurementFeedItem,NutritionMeasurementIter,
+                       NutritionMeasurement)
 
 
 __author__ = "Ali Onur Uyar"

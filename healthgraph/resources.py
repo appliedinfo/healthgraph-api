@@ -89,6 +89,8 @@ class APIobject(object):
             
     def _get_resource_data(self, resource, content_type, params=None):
         resp = self._session.get(resource, content_type, params)
+        print "_get_resource_data",resource, content_type, params
+        print resp
         return resp.json() # TODO - Error Checking
     
     def _get_linked_resource(self, link, cls_override=None, **kwargs):
@@ -391,6 +393,28 @@ class User(Resource):
                                          mod_date_max=mod_date_max,
                                          descending=descending)
 
+    def get_background_activity_measurement_iter(self,
+                                    date_min=None, date_max=None, 
+                                    mod_date_min=None, mod_date_max=None,
+                                    descending=True):
+        return self._get_linked_resource(self._prop_dict['background_activities'],
+                                         date_min=date_min, 
+                                         date_max=date_max,
+                                         mod_date_min=mod_date_min,
+                                         mod_date_max=mod_date_max,
+                                         descending=descending)
+
+    def get_nutrition_measurement_iter(self,
+                                    date_min=None, date_max=None, 
+                                    mod_date_min=None, mod_date_max=None,
+                                    descending=True):
+        return self._get_linked_resource(self._prop_dict['nutrition'],
+                                         date_min=date_min, 
+                                         date_max=date_max,
+                                         mod_date_min=mod_date_min,
+                                         mod_date_max=mod_date_max,
+                                         descending=descending)
+
 class Profile(Resource):
     
     _content_type = content_types.PROFILE
@@ -682,7 +706,7 @@ class WeightMeasurementFeedItem(FeedItem):
 
 class WeightMeasurementIter(ResourceFeedIter):
 
-    _content_type = content_types.WEIGHT_MEASUREMENT_FEED
+    _content_type = content_types.WEIGHT_MEASUREMENT_FEED#WeightSetFeed
     _item_cls = WeightMeasurementFeedItem
 
     def __init__(self, resource, 
@@ -698,6 +722,99 @@ class WeightMeasurementIter(ResourceFeedIter):
                                                     descending=descending,
                                                     session=session)
 
+
+class BackgroundActivityFeedItem(FeedItem):
+
+    _prop_defs = {'uri': PropResourceLink('BackgroundActivity'),
+                  'timestamp': parse_datetime,
+                  'calories_burned': float,
+                  'steps': float,
+                  }
+    _prop_main = ('timestamp',)
+
+    def __init__(self, data, session=None):
+        super(WeightMeasurementFeedItem, self).__init__(data, session=session)
+
+
+class BackgroundActivityIter(ResourceFeedIter):
+
+    _content_type = content_types.BACKGROUND_ACTIVITY_FEED
+    _item_cls = BackgroundActivityFeedItem
+
+    def __init__(self, resource, 
+                 date_min=None, date_max=None,
+                 mod_date_min=None, mod_date_max=None,
+                 descending=True,
+                 session=None):
+        super(BackgroundActivityIter, self).__init__(resource,
+                                                    date_min=date_min,
+                                                    date_max=date_max,
+                                                    mod_date_min=mod_date_min,
+                                                    mod_date_max=mod_date_max,
+                                                    descending=descending,
+                                                    session=session)
+class NutritionMeasurementFeedItem(FeedItem):
+
+    _prop_defs = {'uri': PropResourceLink('NutritionMeasurement'),
+                  'timestamp': parse_datetime,
+                  'calories': float,
+                  'carbohydrates': float,
+                  'fat':float,
+                  'fiber':float,
+                  'protein':float,
+                  'sodium':float,
+                  'water':float
+                  }
+    _prop_main = ('timestamp',)
+
+    def __init__(self, data, session=None):
+        super(NutritionMeasurementFeedItem, self).__init__(data, session=session)
+
+
+
+class NutritionMeasurementIter(ResourceFeedIter):
+
+    _content_type = content_types.NUTRITION_MEASUREMENT_FEED
+    _item_cls = NutritionMeasurementFeedItem
+
+    def __init__(self, resource, 
+                 date_min=None, date_max=None,
+                 mod_date_min=None, mod_date_max=None,
+                 descending=True,
+                 session=None):
+        super(NutritionMeasurementIter, self).__init__(resource,
+                                                    date_min=date_min,
+                                                    date_max=date_max,
+                                                    mod_date_min=mod_date_min,
+                                                    mod_date_max=mod_date_max,
+                                                    descending=descending,
+                                                    session=session)
+class NutritionMeasurement(Resource):
+    
+    _content_type = content_types.NUTRITION_MEASUREMENT
+    _prop_defs = {'uri': PropResourceLink('NutritionMeasurement'),
+                  'userID': int,
+                  'timestamp': parse_datetime,
+                  'calories': float,
+                  'carbohydrates': float,
+                  'fat':float,
+                  'fiber':float,
+                  'protein':float,
+                  'sodium':float,
+                  'water':float,
+                  "meal": str,
+                  "source": str
+                  #todo add more fields
+                  }
+    _prop_main = ('timestamp',)
+
+    
+    def __init__(self, resource, session=None):
+        super(NutritionMeasurement, self).__init__(resource, session=session)
+        
+    def get_activity_detail(self):
+        return self._get_linked_resource(self._prop_dict['uri'])
+    
 
 class SleepMeasurementFeedItem(FeedItem):
 
