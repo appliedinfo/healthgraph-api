@@ -28,6 +28,7 @@ class Session(object):
         
     def request(self, request_type, resource, content_type=None, 
                 params=None, data=None):
+        print params,content_type
         headers = {'Authorization': "Bearer %s" % self._access_token,}
         content_header = None
         if content_type is not None:
@@ -79,4 +80,10 @@ def init_session(access_token):
     
 def get_session():
     return _default_session
+
+if __name__ == '__main__':
+    print "abcd"
+    s = Session("9d17088568a14f9f912f683df354a61a")
+    params = {'noLaterThan': '2016-08-04', 'pageSize': 25, 'noEarlierThan': '2016-08-04 12:08:40'}
+    print s.request("GET","weight","WeightSetFeed",params= params)
     

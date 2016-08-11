@@ -95,3 +95,5 @@ def parse_date_param(val):
     else:
         return val
 
+if __name__ == '__main__':
+    print parse_datetime("Sat, 1 Jan 2011 00:07:00")

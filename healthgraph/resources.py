@@ -89,8 +89,7 @@ class APIobject(object):
             
     def _get_resource_data(self, resource, content_type, params=None):
         resp = self._session.get(resource, content_type, params)
-        print "_get_resource_data",resource, content_type, params
-        print resp
+        print "_get_resource_data",resource, content_type, params 
         return resp.json() # TODO - Error Checking
     
     def _get_linked_resource(self, link, cls_override=None, **kwargs):
@@ -812,7 +811,7 @@ class NutritionMeasurement(Resource):
     def __init__(self, resource, session=None):
         super(NutritionMeasurement, self).__init__(resource, session=session)
         
-    def get_activity_detail(self):
+    def get_nutrition_detail(self):
         return self._get_linked_resource(self._prop_dict['uri'])
     
 
